@@ -8,7 +8,6 @@
       <li><a href="graduates.php"> Graduated </a></li>
       <li><a href="store.php"> Store </a></li>
       <?php if(logged_in($conn)): ?>
-        <li><a href="index.php"> Alumni </a></li>
         <li><a href="message_board.php">Message Board</a></li>
         <li><a href="logout.php"> Log Out </a></li>
       <?php else: ?>

@@ -75,3 +75,102 @@ table {
     width: 100%;
   }
 }
+.info-container {
+  margin-bottom: 20px;
+  .desc {
+    font-weight: bold;
+  }
+}
+.general-info {
+  @extend .info-container;
+}
+.graduation-info {
+  @extend .info-container;
+}
+.friend-info {
+  @extend .info-container;
+}
+.user-profile {
+  padding-left: 40px;
+  border-left: 1px solid #CCC;
+  h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #666;
+  }
+}
+.content {
+  margin-top: 30px;
+}
+#messages{
+  .comment {
+    .commentAuthor {
+      color: #999;
+    }
+    .commentText {
+      color: #FFF;
+    }
+  }
+  .commentList {
+    overflow: scroll;
+    height: 500px;
+    border: 1px solid #CCC;
+    background-color: #333;
+  }
+  .commentForm {
+    input {
+      &[type="text"] {
+        width: 90%;
+      }
+      &[type="submit"] {
+        background-color: #FF5600;
+        color: #FFF;
+        width: 10%;
+      }
+    }
+  }
+}
+.sidebar {
+  .profile-picture {
+    padding: 8px;
+    border: 1px solid #CCC;
+    text-align: center;
+    margin-bottom: 20px;
+    img {
+      max-width: 180px;
+    }
+  }
+}
+.top_header_button {
+  margin-top: 20px;
+}
+.follow_button {
+  @extend .top_header_button;
+}
+.unfollow_button {
+  @extend .top_header_button;
+}
+.update-profile-button {
+  @extend .top_header_button;
+}
+.friend-info {
+  .friend {
+    max-width: 80px;
+    text-align: center;
+    .friend-icon {
+      img {
+        max-width: 50px;
+        max-height: 50px;
+      }
+    }
+    .friend-name {
+      a {
+        color: #002147;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

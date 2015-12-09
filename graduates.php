@@ -48,6 +48,25 @@
     $link = $link."?sort_column=$column_name&direction=$direction";
     return $link;
   }
+
+  function select_filter_tag() {
+    $tag = '<select name="category">';
+    $categories = [
+      "first_name"    => "First Name", 
+      "last_name"     => "Last Name", 
+      "term"          => "Term", 
+      "academic_year" => "Academic Year", 
+      "level_code"    => "Level Code", 
+      "degree"        => "Degree", 
+      "major"         => "Major" 
+    ];
+    foreach($categories as $key => $value) {
+      $selected = $_GET["category"] === $key ? "selected" : " ";
+      $tag = $tag."<option value=\"{$key}\" {$selected} \">$value</option>";
+    }
+    $tag = $tag."</select>";
+    return $tag;
+  }
 ?>
 <!DOCTYPE html>
 <html>
@@ -62,15 +81,7 @@
         <h1> Graduated Students </h1>
         <form action="graduates.php">
           <label for="category">Filter By: </label>
-          <select name="category">
-            <option value="first_name">First Name</option>
-            <option value="last_name">Last Name</option>
-            <option value="academic_year">Academic Year</option>
-            <option value="term">Term</option>
-            <option value="level_code">Level Code</option>
-            <option value="degree">Degree</option>
-            <option value="major">Major</option>
-          </select>
+          <?= select_filter_tag() ?>
           <input type="text" name="value" />
           <input type="submit" name="filter" value="Search"/>
           <input type="submit" name="clear" value="Clear Filter"/>

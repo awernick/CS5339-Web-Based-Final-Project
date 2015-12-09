@@ -18936,13 +18936,17 @@ var Comment = React.createClass({
       'div',
       { className: 'comment' },
       React.createElement(
-        'h2',
+        'span',
         { className: 'commentAuthor' },
-        this.props.author
+        '[',
+        this.props.date,
+        '] ',
+        this.props.author,
+        ': '
       ),
       React.createElement(
         'span',
-        null,
+        { className: 'commentText' },
         this.props.children.toString()
       )
     );
@@ -18956,7 +18960,7 @@ var CommentList = React.createClass({
     var commentNodes = this.props.data.map(function (comment) {
       return React.createElement(
         Comment,
-        { author: comment.author, key: comment.id },
+        { author: comment.author, date: comment.date, key: comment.id },
         comment.text
       );
     });
@@ -18972,7 +18976,7 @@ var CommentForm = React.createClass({
   displayName: 'CommentForm',
 
   getInitialState: function () {
-    return { author: '', text: '' };
+    return { text: '' };
   },
   handleTextChange: function (e) {
     this.setState({ text: e.target.value });
@@ -18980,10 +18984,11 @@ var CommentForm = React.createClass({
   handleSubmit: function (e) {
     e.preventDefault();
     var text = this.state.text.trim();
+    var date = new Date().toLocaleString();
     if (!text) {
       return;
     }
-    this.props.onCommentSubmit({ text: text });
+    this.props.onCommentSubmit({ text: text, date: date });
     this.setState({ text: '' });
   },
   render: function () {
@@ -19029,6 +19034,7 @@ var CommentBox = React.createClass({
       data: comment,
       success: (function (data) {
         this.setState({ data: data });
+        $(".commentList").animate({ scrollTop: $(document).height() }, "slow");
       }).bind(this),
       error: (function (xhr, status, err) {
         this.setState({ data: comments });

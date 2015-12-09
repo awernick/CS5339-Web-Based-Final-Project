@@ -44,7 +44,7 @@
         
         else {
           $incorrect_password = "Incorrect Password provided.";
-          array_push($incorrect_password);
+          array_push($errors, $incorrect_password);
         }
       } 
      

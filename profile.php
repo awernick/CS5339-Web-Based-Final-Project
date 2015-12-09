@@ -8,7 +8,7 @@
   $id = $_GET["id"];
 
   $query = $conn->prepare("SELECT users.*, images.data, images.type FROM users 
-                             JOIN images ON users.image_id = images.id  
+                        LEFT JOIN images ON users.image_id = images.id  
                             WHERE users.id=:id");
 
   $query->bindValue(":id", $id);
@@ -16,6 +16,10 @@
   $user = $query->fetch(PDO::FETCH_ASSOC);
 
   if(isset($_POST["upload_pic"])) {
+    if(empty($_FILES["profile_pic"]["tmp_name"])){
+      header("Location: profile.php?id={$user["id"]}");
+    }
+    else {
 
     # Read file contents
     $tmp_file = $_FILES['profile_pic']['tmp_name'];
@@ -49,7 +53,7 @@
 
     # Redirect to current profile to reload image
     header("Location: profile.php?id={$user['id']}");
-
+    }
   }
 
   # Friends
@@ -67,7 +71,11 @@
 
   if(count($friend_ids) > 0) {
     $friend_ids = implode(',', $friend_ids);
-    $sql = "SELECT * FROM users WHERE id IN ($friend_ids)";
+    $sql = "SELECT users.*, images.data as image_data, images.type 
+              FROM users
+         LEFT JOIN images 
+                ON users.image_id = images.id 
+             WHERE users.id IN ($friend_ids)";
     $query = $conn->prepare($sql);
     $query->execute();
 
@@ -91,8 +99,8 @@
   </head>
   <body>
     <?php require_once '_navbar.php'; ?>
-    <div class="container">
-      <div class="four columns">
+    <div class="container content">
+      <div class="three columns sidebar">
         <div class="profile-picture">
           <?php if(!isset($user["image_id"])): ?>
             <img src="http://placehold.it/200x200">
@@ -103,27 +111,32 @@
         <?php if(logged_in() && $current_user["id"] === $user["id"]): ?>
           <form action="profile.php?id=<?= $user["id"] ?>" method="post" enctype="multipart/form-data">
             <input type="file" name="profile_pic" value=""/>
-            <input type="submit" name="upload_pic" />
+            <input type="submit" name="upload_pic" value="Upload Picture"/>
           </form>
         <?php endif ?>
       </div>
-      <div class="eight columns">
+      <div class="nine columns">
         <div class="user-profile">
           <div class="row">
             <div class="eight columns">
               <h1><?= "{$user["first_name"]} {$user["last_name"]}" ?>'s Profile</h1>
             </div>
             <div class="four columns">
-              <?php if(logged_in($conn)): ?>
+              <?php if(logged_in() && $user["id"] != $current_user["id"]): ?>
                 <form action="follow.php" method="post">
                   <input type="hidden" name="followed_id" value="<?= $user["id"] ?>"/>
                   <?php if(!is_following(intval($current_user["id"]), $user["id"])): ?>
-                    <input type="submit" name="follow" value="Follow" />
+                    <input type="submit" name="follow" value="Follow" class="follow_button"/>
                   <?php else: ?>
-                    <input type="submit" name="unfollow" value="Unfollow" />
+                    <input type="submit" name="unfollow" value="Unfollow" class="unfollow_button" />
                   <?php endif;?>
                 </form>
               <?php endif; ?>
+              <?php if(logged_in() && $user["id"] === $current_user["id"]):?>
+                <form action="follow.php" method="post">
+                  <input type="submit" name="update_profile" value="Update Profile" class="update-profile-button" />
+                </form>
+              <?php endif?>
             </div>
           </div>
 
@@ -161,7 +174,23 @@
 
           <div class="row friend-info">
             <h3> Friends </h3>
-            <div> </div>
+            <?php foreach($friends as $friend): ?>
+              <div class="friend"> 
+                <div class="friend-icon">
+                  <?php if(!isset($friend["image_data"])): ?>
+                    <img src="http://placehold.it/50x50"/>
+                  <?php else: ?>
+                    <?php base64_image($friend["image_data"], $friend["type"]); ?>
+                  <?php endif ?>
+                </div>
+                <div class="friend-name">
+                  <a href="profile.php?id=<?= $friend["id"] ?>">
+                    <?= $friend["first_name"] ?><br />
+                    <?= $friend["last_name"] ?>
+                  </a>
+                </div>
+              </div>
+            <?php endforeach; ?>
           </div>
         </div>
       </div>
