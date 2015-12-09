@@ -79,8 +79,7 @@
 
   function base64_image($data, $mime) {
     $b64data = "data:".$mime.";base64," . base64_encode($data);
-    #echo '<img src="'.$b64data.'" alt="" />'; 
-    echo '<img src="data:image/jpeg;base64,'.base64_encode($data).'"/>';
+    echo '<img src="'.$b64data.'" alt="" />'; 
   }
   
 ?>
