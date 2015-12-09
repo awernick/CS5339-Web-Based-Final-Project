@@ -19064,7 +19064,7 @@ var CommentBox = React.createClass({
   }
 });
 
-ReactDOM.render(React.createElement(CommentBox, { url: '/messages.php', pollInterval: '5000' }), document.getElementById('messages'));
+ReactDOM.render(React.createElement(CommentBox, { url: '/team12/messages.php', pollInterval: '5000' }), document.getElementById('messages'));
 
 },{"react":157,"react-dom":1}],159:[function(require,module,exports){
 // shim for using process in browser

@@ -44,14 +44,8 @@
       $password_digest = encrypt_password($password);
       
       try {
-        $stmt = $conn->prepare("INSERT INTO users(first_name, last_name, email, password_digest) 
-                                VALUES(:first_name, :last_name, :email, :password_digest)");
-
-        $stmt->bindValue(":first_name",$first_name);
-        $stmt->bindValue(":last_name",$last_name);
-        $stmt->bindValue(":email", $email);
-        $stmt->bindValue(":password_digest", $password_digest);
-        $stmt->execute();
+        $stmt = $conn->query("INSERT INTO users(first_name, last_name, email, password_digest) 
+                                VALUES('$first_name', '$last_name', '$email', '$password_digest')");
 
         $auth_token = generate_auth_token(); 
         set_auth_token($username, $auth_token, $conn);

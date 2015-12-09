@@ -7,13 +7,11 @@
 
   $id = $_GET["id"];
 
-  $query = $conn->prepare("SELECT users.*, images.data, images.type FROM users 
-                        LEFT JOIN images ON users.image_id = images.id  
-                            WHERE users.id=:id");
+  $query = $conn->query("SELECT users.*, images.data, images.type FROM users 
+                           LEFT JOIN images ON users.image_id = images.id  
+                          WHERE users.id='$id'");
 
-  $query->bindValue(":id", $id);
-  $query->execute();
-  $user = $query->fetch(PDO::FETCH_ASSOC);
+  $user = $query->fetch_assoc();
 
   # Update Profile Info
   if(isset($_POST["update_profile"])) {
@@ -21,16 +19,11 @@
     $last_name = $_POST["last_name"];
     $email = $_POST["email"];
 
-    $query = $conn->prepare("UPDATE users 
-                                SET first_name=:first_name, 
-                                    last_name=:last_name, 
-                                    email=:email
-                              WHERE id=:id");
-    $query->bindValue(":first_name", $first_name);
-    $query->bindValue(":last_name", $last_name);
-    $query->bindValue(":email", $email);
-    $query->bindValue(":id", $user["id"]);
-    $query->execute();
+    $query = $conn->query("UPDATE users 
+                                SET first_name='$first_name', 
+                                    last_name='$last_name', 
+                                    email='$email'
+                              WHERE id='$id'");
     header("Location: profile.php?id={$user["id"]}");
   }
 
@@ -53,24 +46,17 @@
     $mime = $info['mime'];
 
     # Prepare query for insertion
-    $query = $conn->prepare("INSERT INTO images(data, type)
-                    VALUES('$file_contents', :type)");
-
-    $query->bindValue(":type", $mime);
-    $query->execute();
+    $query = $conn->query("INSERT INTO images(data, type)
+                    VALUES('$file_contents', '$mime')");
 
     # Fetch image id and update the user profile
-    $image_id = $conn->lastInsertId();
+    $image_id = $conn->insert_id;
 
     # Update user with current image
-    $query = $conn->prepare("UPDATE users 
-                                SET image_id=:image_id 
-                              WHERE id=:user_id");
+    $query = $conn->query("UPDATE users 
+                              SET image_id='$image_id' 
+                            WHERE id='{$user["id"]}'");
     
-    $query->bindValue(":image_id", $image_id);
-    $query->bindValue(":user_id", $user["id"]);
-    $query->execute();
-
     # Redirect to current profile to reload image
     header("Location: profile.php?id={$user['id']}");
     }
@@ -78,14 +64,12 @@
 
   # Friends
   $friends = array();
-  $query = $conn->prepare("SELECT * FROM friendships 
-                            WHERE follower_id=:follower_id");
+  $query = $conn->query("SELECT * FROM friendships 
+                          WHERE follower_id='$id'");
 
-  $query->bindValue(":follower_id", $id);
-  $query->execute();
   $friend_ids = array();
 
-  while($friend = $query->fetch(PDO::FETCH_ASSOC)){
+  while($friend = $query->fetch_assoc()){
     array_push($friend_ids, $friend["followed_id"]);  
   }
 
@@ -96,10 +80,9 @@
          LEFT JOIN images 
                 ON users.image_id = images.id 
              WHERE users.id IN ($friend_ids)";
-    $query = $conn->prepare($sql);
-    $query->execute();
+    $query = $conn->query($sql);
 
-    while($friend = $query->fetch(PDO::FETCH_ASSOC)) {
+    while($friend = $query->fetch_assoc()) {
       array_push($friends, $friend);
     }
   }

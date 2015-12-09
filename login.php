@@ -21,13 +21,11 @@
     }
 
     if(count($errors) == 0) {
-      $stmt = $conn->prepare("SELECT email, password_digest FROM users 
-                               WHERE email=:email");   
+      $stmt = $conn->query("SELECT email, password_digest FROM users 
+                               WHERE email='$email'");   
 
       # Bind values to the SQL query
-      $stmt->bindValue(":email", $email);
-      $stmt->execute();
-      $result = $stmt->fetch(PDO::FETCH_ASSOC);
+      $result = $stmt->fetch_assoc();
 
       if(count($result) > 0) {
         # Create digest of password

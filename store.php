@@ -1,11 +1,10 @@
 <?php
   require_once 'config.php';
   
-  $query = $conn->prepare("SELECT * 
-                             FROM products
-                        LEFT JOIN images
-                               ON products.image_id = images.id");
-  $query->execute();
+  $query = $conn->query("SELECT * 
+                           FROM products
+                      LEFT JOIN images
+                             ON products.image_id = images.id");
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +20,7 @@
         <h1> Alumni Store </h1>
         <hr/>
         <div class="products">
-          <?php while($product = $query->fetch(PDO::FETCH_ASSOC)): ?>
+          <?php while($product = $query->fetch_assoc()): ?>
             <div class="product">
               <div class="product-image"> 
                 <?php if(isset($product["data"])): ?> 

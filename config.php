@@ -8,13 +8,11 @@
   $database = "cs5339team12fa15";
   $host = "earth.cs.utep.edu";
 
-  try {
-    // Attempt to connect to the database
-    $conn = new PDO("mysql:host=$host;dbname=$database", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  } catch(PDOException $e) {
-    // Display error message if connection could not be established
-    echo "Connection failed: " . $e->getMessage();
+  // Attempt to connect to the database
+  $conn = new mysqli($host, $username, $password, $database);
+  // Display error message if connection could not be established
+  if ($conn->connect_error) {
+    echo "Connection failed: " . $conn->connect_error; 
     die();
   }
   

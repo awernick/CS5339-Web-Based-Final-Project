@@ -27,8 +27,7 @@
     $sql = "$sql ORDER BY $sort_column $direction";
   }
 
-  $query = $conn->prepare($sql);
-  $query->execute();
+  $query = $conn->query($sql);
   
   # Create links to sort table
   function sortable_link($column_name) {
@@ -94,7 +93,7 @@
             <th></th>
           </thead>
           <tbody> 
-            <?php while($graduate = $query->fetch(PDO::FETCH_ASSOC)): ?>
+            <?php while($graduate = $query->fetch_assoc()): ?>
             <tr>
               <td><?= $graduate["first_name"] ?></td> 
               <td><?= $graduate["last_name"] ?></td> 

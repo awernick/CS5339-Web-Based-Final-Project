@@ -119,7 +119,7 @@ var CommentBox = React.createClass({
  });
 
 ReactDOM.render(
-  <CommentBox url="/messages.php" pollInterval="5000" />,
+  <CommentBox url="/team12/messages.php" pollInterval="5000" />,
   document.getElementById('messages')
 );
 
