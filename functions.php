@@ -19,6 +19,11 @@ function generate_auth_token() {
   return substr(md5(microtime()),rand(0,26),15);       
 }
 
+function base64_image($data, $mime) {
+  $b64data = "data:".$mime.";base64," . base64_encode($data);
+  echo '<img src="'.$b64data.'" alt="" />'; 
+}
+
 function is_following($follower_id, $followed_id) {
   global $conn;
 

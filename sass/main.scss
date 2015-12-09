@@ -155,7 +155,10 @@ table {
 }
 .friend-info {
   .friend {
-    max-width: 80px;
+    display: inline-block;
+    padding-right: 20px; 
+    padding-bottom: 20px; 
+    max-width: 100px;
     text-align: center;
     .friend-icon {
       img {
@@ -170,6 +173,27 @@ table {
         &:hover {
           text-decoration: underline;
         }
+      }
+    }
+  }
+}
+.products {
+  text-align: center;
+  .product {
+    display: inline-block;
+    padding: 20px;
+    .product-name {
+      text-align: left;
+      font-size: 1.2em;
+    }
+    .product-price {
+      text-align: left;
+      color: #666;
+    }
+    .product-image {
+      img {
+        max-width: 200px;
+        max-height: 200px;
       }
     }
   }

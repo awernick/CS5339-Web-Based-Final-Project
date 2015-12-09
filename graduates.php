@@ -1,10 +1,6 @@
 <?php 
   require_once 'config.php';
 
-  if(!logged_in($conn)) {
-    header("Location: index.php");
-  }
-  
   $category = NULL;
   $value = NULL;
 

@@ -1,12 +1,12 @@
 <?php 
   require_once 'config.php'; 
     
-  if(logged_in($conn)) {
+  if(logged_in()) {
     header("Location: index.php");
   }
 
   if(isset($_POST['login'])) {
-    $email = mysql_real_escape_string($_POST['email']);
+    $email = $_POST['email'];
     $password = $_POST['password'];
     $password_confirmation = $_POST['password_confirmation'];
 
@@ -77,7 +77,7 @@
             <input type="text" name="email" />
             <br/>
             <label for="password"> Password: </label>
-            <input type="text" name="password" />
+            <input type="password" name="password" />
             <input type="submit" name="login"/>
           </form>
         </div>

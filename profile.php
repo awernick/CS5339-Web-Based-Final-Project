@@ -15,6 +15,26 @@
   $query->execute();
   $user = $query->fetch(PDO::FETCH_ASSOC);
 
+  # Update Profile Info
+  if(isset($_POST["update_profile"])) {
+    $first_name = $_POST["first_name"];
+    $last_name = $_POST["last_name"];
+    $email = $_POST["email"];
+
+    $query = $conn->prepare("UPDATE users 
+                                SET first_name=:first_name, 
+                                    last_name=:last_name, 
+                                    email=:email
+                              WHERE id=:id");
+    $query->bindValue(":first_name", $first_name);
+    $query->bindValue(":last_name", $last_name);
+    $query->bindValue(":email", $email);
+    $query->bindValue(":id", $user["id"]);
+    $query->execute();
+    header("Location: profile.php?id={$user["id"]}");
+  }
+
+  # Update Profile Picture
   if(isset($_POST["upload_pic"])) {
     if(empty($_FILES["profile_pic"]["tmp_name"])){
       header("Location: profile.php?id={$user["id"]}");
@@ -84,11 +104,17 @@
     }
   }
 
+  function information_field_tag($field) {
+    global $user, $current_user;
 
-  function base64_image($data, $mime) {
-    $b64data = "data:".$mime.";base64," . base64_encode($data);
-    echo '<img src="'.$b64data.'" alt="" />'; 
+    $value = $user[$field];
+    if(logged_in() && $current_user["id"] === $user["id"]){
+      return "<input type=\"text\" name=\"$field\" value=\"$value\" form=\"update_prof\" \\>";
+    } else {
+      return $user["$field"];
+    }
   }
+
   
 ?>
 <!DOCTYPE html>
@@ -133,7 +159,7 @@
                 </form>
               <?php endif; ?>
               <?php if(logged_in() && $user["id"] === $current_user["id"]):?>
-                <form action="follow.php" method="post">
+                <form action="profile.php?id=<?= $user["id"] ?>" id="update_prof" method="post">
                   <input type="submit" name="update_profile" value="Update Profile" class="update-profile-button" />
                 </form>
               <?php endif?>
@@ -144,15 +170,15 @@
             <h3> General Information </h3>
             <div class="info"> 
               <span class="desc"> First Name: </span>
-              <?= $user["first_name"] ?>
+              <?= information_field_tag("first_name"); ?>
             </div>
             <div class="info"> 
               <span class="desc"> Last Name: </span>
-              <?= $user["last_name"] ?>
+              <?= information_field_tag("last_name"); ?>
             </div>
             <div class="info"> 
               <span class="desc"> E-Mail: </span>
-              <?= $user["email"] ?>
+              <?= information_field_tag("email"); ?>
             </div>
           </div>
 
@@ -160,15 +186,15 @@
             <h3> Gradutation Information </h3>
             <div class="info"> 
               <span class="desc"> Major: </span>
-              <?= $user["major"] ?>
+              <?= information_field_tag("major"); ?>
             </div>
             <div class="info"> 
               <span class="desc"> Academic Year: </span>
-              <?= $user["academic_year"] ?>
+              <?= information_field_tag("academic_year"); ?>
             </div>
             <div class="info"> 
               <span class="desc">Term: </span>
-              <?= $user["term"] ?>
+              <?= information_field_tag("term"); ?>
             </div>
           </div>
 
