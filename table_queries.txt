@@ -1,0 +1,20 @@
+CREATE TABLE `students` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `first_name` varchar(50) default NULL,
+  `last_name` varchar(50) default NULL,
+  `email` varchar(254) default NULL,
+  `password_digest` varchar(50) default '',
+  `auth_token` varchar(15) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `graduate_students` (
+  `academic_year` varchar(7) default NULL,
+  `term` int(6) unsigned default NULL,
+  `last_name` varchar(22) default NULL,
+  `first_name` varchar(16) default NULL,
+  `major` varchar(4) default NULL,
+  `level_code` varchar(2) default NULL,
+  `degree` varchar(8) default NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
