@@ -182,6 +182,8 @@ table {
   .product {
     display: inline-block;
     padding: 20px;
+    vertical-align: top;
+    max-width: 200px;
     .product-name {
       text-align: left;
       font-size: 1.2em;
@@ -197,4 +199,50 @@ table {
       }
     }
   }
+}
+.product {
+  .nine.columns {
+    border-left: 1px solid #CCC;
+    padding-left: 30px;
+    height: 600px;
+  }
+  .three.columns {
+    .product-image {
+      text-align: center;
+      img {
+        max-width: 200px;
+      }
+    }
+  }
+  hr {
+    margin-top: .5rem;
+  }
+  [target="paypal"] {
+    display: inline-block;
+    float:right;
+    margin-top: 30px;
+  }
+  h1 {
+    display: inline-block;
+  }
+  .product-info {
+    .title {
+      width: 80px;
+      text-align: right;
+      display: inline-block;
+      vertical-align: top;
+      font-weight: 600;
+    }
+    .value {
+      max-width: 500px;
+      display: inline-block;
+      padding-left: 20px;
+      vertical-align: top;
+      padding-bottom: 10px;
+    }
+  }
+}
+.back {
+  margin-top: -10px;
+  margin-bottom: 20px;
 }

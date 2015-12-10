@@ -1,7 +1,7 @@
 <?php
   require_once 'config.php';
   
-  $query = $conn->query("SELECT * 
+  $query = $conn->query("SELECT products.*, images.data, images.type 
                            FROM products
                       LEFT JOIN images
                              ON products.image_id = images.id");
